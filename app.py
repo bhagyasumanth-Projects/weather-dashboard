@@ -86,21 +86,29 @@ st.plotly_chart(fig_temp_future, use_container_width=True, key="pred_temp")
 fig_rain_future = px.line(forecast_rain, x='ds', y='yhat', title="Predicted Rainfall (Next 7 Days)")
 st.plotly_chart(fig_rain_future, use_container_width=True, key="pred_rain")
 
-# --- Forecast Tables ---
+
 st.markdown("### 📋 Predicted Temperature Table")
+temp_table = forecast_temp[['ds','yhat','yhat_lower','yhat_upper']].rename(
+    columns={'ds':'Date','yhat':'Predicted Temp (°C)',
+             'yhat_lower':'Lower Bound','yhat_upper':'Upper Bound'}
+)
 st.dataframe(
-    forecast_temp[['ds','yhat','yhat_lower','yhat_upper']]\
-        .rename(columns={'ds':'Date','yhat':'Predicted Temp (°C)',
-                         'yhat_lower':'Lower Bound','yhat_upper':'Upper Bound'}),
-    use_container_width=True, key="table_temp"
+    temp_table.style.background_gradient(
+        subset=["Predicted Temp (°C)"], cmap="RdYlGn_r"  # red high, green low
+    ),
+    use_container_width=True
 )
 
 st.markdown("### 📋 Predicted Rainfall Table")
+rain_table = forecast_rain[['ds','yhat','yhat_lower','yhat_upper']].rename(
+    columns={'ds':'Date','yhat':'Predicted Rainfall (mm)',
+             'yhat_lower':'Lower Bound','yhat_upper':'Upper Bound'}
+)
 st.dataframe(
-    forecast_rain[['ds','yhat','yhat_lower','yhat_upper']]\
-        .rename(columns={'ds':'Date','yhat':'Predicted Rainfall (mm)',
-                         'yhat_lower':'Lower Bound','yhat_upper':'Upper Bound'}),
-    use_container_width=True, key="table_rain"
+    rain_table.style.background_gradient(
+        subset=["Predicted Rainfall (mm)"], cmap="Blues"  # light blue low, dark blue high
+    ),
+    use_container_width=True
 )
 
 # ------------------------------
@@ -130,27 +138,3 @@ elif rain_pred['yhat'] > 10:
 else:
     st.write("☀️ Mostly dry conditions predicted.")
 # --- Forecast Tables with Color Highlights ---
-
-st.markdown("### 📋 Predicted Temperature Table")
-temp_table = forecast_temp[['ds','yhat','yhat_lower','yhat_upper']].rename(
-    columns={'ds':'Date','yhat':'Predicted Temp (°C)',
-             'yhat_lower':'Lower Bound','yhat_upper':'Upper Bound'}
-)
-st.dataframe(
-    temp_table.style.background_gradient(
-        subset=["Predicted Temp (°C)"], cmap="RdYlGn_r"  # red high, green low
-    ),
-    use_container_width=True
-)
-
-st.markdown("### 📋 Predicted Rainfall Table")
-rain_table = forecast_rain[['ds','yhat','yhat_lower','yhat_upper']].rename(
-    columns={'ds':'Date','yhat':'Predicted Rainfall (mm)',
-             'yhat_lower':'Lower Bound','yhat_upper':'Upper Bound'}
-)
-st.dataframe(
-    rain_table.style.background_gradient(
-        subset=["Predicted Rainfall (mm)"], cmap="Blues"  # light blue low, dark blue high
-    ),
-    use_container_width=True
-)
