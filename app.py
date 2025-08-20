@@ -32,7 +32,7 @@ def forecast_city(data, city, column, days=7):
 # ------------------------------
 # Load Data
 # ------------------------------
-data = pd.read_excel(r"C:\Users\pylab\OneDrive\Documents\Desktop\3_cites(1)_modified.xlsx")
+data = pd.read_excel("3_cites(1)_modified.xlsx")
 data['Date'] = pd.to_datetime(data['Date'])
 
 st.title("🌦 Weather, Rainfall & AQI Dashboard")
