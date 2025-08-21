@@ -33,7 +33,14 @@ def forecast_city(data, city, column, days=7):
 # Load Data
 # ------------------------------
 data = pd.read_csv("ap_cities_with_rainfall.csv")
-data['Date'] = pd.to_datetime(data['Date'])
+# Clean date strings
+data['Date'] = data['Date'].astype(str).str.strip()
+
+# Convert to datetime with error coercion to handle invalid formats gracefully
+data['Date'] = pd.to_datetime(data['Date'], errors='coerce')
+
+# Optionally, drop rows where date conversion failed (NaT values)
+data = data.dropna(subset=['Date'])
 
 st.title("🌦 Weather, Rainfall & AQI Dashboard")
 
