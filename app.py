@@ -55,7 +55,7 @@ city_data = data[data['City'] == city]
 # ------------------------------
 c1, c2, c3 = st.columns(3)
 c1.metric("🌡 Avg Temp (°C)", round(city_data['Avg_Temperature'].mean(), 2))
-c2.metric("☔ Total Rainfall (mm)", round(city_data['Rainfall(mm)'].sum(), 2))
+c2.metric("☔ Total Rainfall (mm)", round(city_data['Rainfall (mm)'].sum(), 2))
 c3.metric("💨 Mean AQI", round(city_data['AQI'].mean(), 2))
 
 # ------------------------------
