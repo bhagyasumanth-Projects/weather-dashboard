@@ -1,4 +1,4 @@
-Date,City,Avg_Temperature,Max_Temperature,Min_Temperature,AQI,Rainfall(mm)
+Date,City,Avg_Temperature,Max_Temperature,Min_Temperature,AQI,Rainfall (mm)
 10-Aug-25,Anantapur,24.46,27.6,22.02,67,15.44
 10-Aug-25,Chittoor,25.11,26.18,24.61,67,36.43
 10-Aug-25,Eluru,28.06,29.21,28.32,67,7.54
@@ -134,3 +134,4 @@ Date,City,Avg_Temperature,Max_Temperature,Min_Temperature,AQI,Rainfall(mm)
 18-Aug-25,Tirupati,25.77,27.32,23.43,52,6.57
 18-Aug-25,Vijayawada,25.96,27.3,23.75,59,44.36
 18-Aug-25,Visakhapatnam,28,27.28,23.72,59,74.23
+
