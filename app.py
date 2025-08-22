@@ -16,62 +16,47 @@ st.set_page_config(
 )
 
 # ------------------------------
-# Custom CSS for Styling
+# Custom CSS for Styling (Theme-Adaptive)
 # ------------------------------
 def style_dashboard():
     """
-    Injects custom CSS to style the dashboard with a pale sky blue theme
-    and ensures the sidebar controls are visible with black text.
+    Injects custom CSS that uses Streamlit's theme variables
+    to adapt to both light and dark modes.
     """
     st.markdown("""
     <style>
-        /* Main background with a sky-like gradient */
-        [data-testid="stAppViewContainer"] {
-            background-image: linear-gradient(to bottom, #a1c4fd 0%, #c2e9fb 100%);
-            background-size: cover;
-        }
-
-        /* Main content block with a semi-transparent white background */
+        /* Main content block with a semi-transparent background */
         [data-testid="stVerticalBlock"] .st-emotion-cache-15i5057 {
-            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+            background-color: rgba(128, 128, 128, 0.1); /* Faint, semi-transparent grey */
             border-radius: 15px;
             padding: 2rem;
         }
         
-        /* KPI Card Style for the light theme */
+        /* KPI Card Style using theme variables */
         .kpi-card {
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: var(--secondary-background-color);
             border-radius: 15px;
             padding: 25px;
             text-align: center;
-            color: #333; /* Dark text for readability */
-            border: 1px solid #ddd;
+            color: var(--text-color);
+            border: 1px solid var(--gray-80);
             height: 100%;
         }
-        .kpi-card h3 { font-size: 1.25rem; margin-bottom: 10px; color: #555; }
-        .kpi-card .value { font-size: 2.2rem; font-weight: bold; color: #000; }
-        .kpi-card .sub-text { font-size: 0.9rem; color: #666; }
-
-        /* General text and headers for the light theme */
-        [data-testid="stMarkdownContainer"] p, h1, h3 { color: #333 !important; }
-        h1 { border-bottom: 2px solid #333; padding-bottom: 10px; }
-
-        /* --- FIX FOR SIDEBAR CONTROLS --- */
-        /* Make all headings and labels in the sidebar black */
-        [data-testid="stSidebar"] h1,
-        [data-testid="stSidebar"] label {
-            color: black !important;
+        .kpi-card h3 { 
+            font-size: 1.25rem; 
+            margin-bottom: 10px; 
+            color: var(--text-color);
+            opacity: 0.7;
         }
-        
-        /* Keep the info box text white for contrast on its blue background */
-        [data-testid="stSidebar"] .st-emotion-cache-1g6goon {
-            color: white !important;
+        .kpi-card .value { 
+            font-size: 2.2rem; 
+            font-weight: bold; 
+            color: var(--text-color);
         }
-        
-        /* Make the text inside the dropdowns black for consistency */
-        [data-testid="stSidebar"] .st-emotion-cache-b7h6b3,
-        [data-testid="stSidebar"] .st-emotion-cache-1n76a9l {
-             color: black !important;
+        .kpi-card .sub-text { 
+            font-size: 0.9rem; 
+            color: var(--text-color);
+            opacity: 0.6;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -238,19 +223,11 @@ with tab1:
     )
 
     if metric_to_plot == "Rainfall(mm)":
-        fig = px.bar(city_data, x='Date', y=metric_to_plot, title=f"Historical {metric_to_plot} in {city}")
+        fig = px.bar(city_data, x='Date', y=metric_to_plot, title=f"Historical {metric_to_plot} in {city}", template="streamlit")
     else:
-        fig = px.line(city_data, x='Date', y=metric_to_plot, title=f"Historical {metric_to_plot} in {city}", markers=True)
+        fig = px.line(city_data, x='Date', y=metric_to_plot, title=f"Historical {metric_to_plot} in {city}", markers=True, template="streamlit")
 
-    fig.update_layout(
-        title_x=0.5, 
-        paper_bgcolor='rgba(0,0,0,0)', 
-        plot_bgcolor='rgba(255,255,255,0.3)',
-        title_font_color="darkblue",
-        xaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-        yaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-        legend=dict(font_color="darkblue")
-    )
+    fig.update_layout(title_x=0.5, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
     st.plotly_chart(fig, use_container_width=True)
 
 with tab2:
@@ -277,18 +254,12 @@ with tab2:
             x='ds', 
             y='yhat', 
             title="Temperature Forecast",
-            labels={'ds': 'Date', 'yhat': 'Predicted Temperature (°C)'}
+            labels={'ds': 'Date', 'yhat': 'Predicted Temperature (°C)'},
+            template="streamlit"
         )
         fig_temp_future.add_scatter(x=forecast_temp['ds'], y=forecast_temp['yhat_upper'], fill='tonexty', mode='lines', line=dict(color='rgba(255, 0, 0, 0.2)'), name='Upper Bound')
         fig_temp_future.add_scatter(x=forecast_temp['ds'], y=forecast_temp['yhat_lower'], fill='tozeroy', mode='lines', line=dict(color='rgba(0, 0, 255, 0.2)'), name='Lower Bound')
-        fig_temp_future.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)', 
-            plot_bgcolor='rgba(255,255,255,0.3)',
-            title_font_color="darkblue",
-            xaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            yaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            legend=dict(font_color="darkblue")
-        )
+        fig_temp_future.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
         st.plotly_chart(fig_temp_future, use_container_width=True)
 
         temp_table = forecast_temp[['ds','yhat','yhat_lower','yhat_upper']].rename(
@@ -306,18 +277,12 @@ with tab2:
             x='ds', 
             y='yhat', 
             title="Rainfall Forecast",
-            labels={'ds': 'Date', 'yhat': 'Predicted Rainfall (mm)'}
+            labels={'ds': 'Date', 'yhat': 'Predicted Rainfall (mm)'},
+            template="streamlit"
         )
         fig_rain_future.add_scatter(x=forecast_rain['ds'], y=forecast_rain['yhat_upper'], fill='tonexty', mode='lines', line=dict(color='rgba(0, 100, 80, 0.2)'), name='Upper Bound')
         fig_rain_future.add_scatter(x=forecast_rain['ds'], y=forecast_rain['yhat_lower'], fill='tozeroy', mode='lines', line=dict(color='rgba(0, 100, 80, 0.2)'), name='Lower Bound')
-        fig_rain_future.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)', 
-            plot_bgcolor='rgba(255,255,255,0.3)',
-            title_font_color="darkblue",
-            xaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            yaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            legend=dict(font_color="darkblue")
-        )
+        fig_rain_future.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
         st.plotly_chart(fig_rain_future, use_container_width=True)
 
         rain_table = forecast_rain[['ds','yhat','yhat_lower','yhat_upper']].rename(
@@ -335,71 +300,4 @@ with tab2:
     if avg_pred_temp > 30:
         temp_insight = f"🥵 **Hot Weather Alert:** With an average temperature of **{avg_pred_temp:.1f}°C**, expect hot conditions. It's a good idea to stay hydrated and avoid direct sun during peak hours."
     elif avg_pred_temp > 25:
-        temp_insight = f"☀️ **Warm & Pleasant:** The weather looks warm and pleasant, with an average of **{avg_pred_temp:.1f}°C**. Great for outdoor activities!"
-    else:
-        temp_insight = f"😊 **Cool & Comfortable:** The forecast predicts a comfortable average temperature of **{avg_pred_temp:.1f}°C**."
-    
-    st.markdown(temp_insight)
-
-    rain_insight = ""
-    if total_pred_rain > 50:
-        rain_insight = f"🌧️ **Heavy Rain Expected:** A significant amount of rain (**{total_pred_rain:.1f} mm**) is forecasted for the week. Be prepared for wet conditions and carry an umbrella."
-    elif total_pred_rain > 10:
-        rain_insight = f"🌦️ **Moderate Showers:** Expect some moderate showers throughout the week, with a total of **{total_pred_rain:.1f} mm** predicted. "
-    else:
-        rain_insight = f"🌤️ **Mostly Dry:** The forecast shows very little rain (**{total_pred_rain:.1f} mm**), so you can expect mostly dry and clear skies."
-
-    st.markdown(rain_insight)
-
-
-with tab3:
-    st.header("City Comparison")
-
-    if not compare_cities:
-        st.warning("Please select at least one city from the sidebar to compare.")
-    else:
-        comparison_data = data[
-            (data['City'].isin(compare_cities)) &
-            (data['Date'].dt.date >= start_date) &
-            (data['Date'].dt.date <= end_date)
-        ]
-
-        st.subheader("🌡️ Average Temperature Comparison")
-        fig_comp_temp = px.line(comparison_data, x='Date', y='Avg_Temperature', color='City',
-                                title='Temperature Trends Across Cities')
-        fig_comp_temp.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)', 
-            plot_bgcolor='rgba(255,255,255,0.3)',
-            title_font_color="darkblue",
-            xaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            yaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            legend=dict(font_color="darkblue")
-        )
-        st.plotly_chart(fig_comp_temp, use_container_width=True)
-
-        st.subheader("☔ Total Rainfall Comparison")
-        total_rain = comparison_data.groupby('City')['Rainfall(mm)'].sum().reset_index()
-        fig_comp_rain = px.bar(total_rain, x='City', y='Rainfall(mm)', color='City',
-                               title='Total Rainfall Across Cities (for selected date range)')
-        fig_comp_rain.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)', 
-            plot_bgcolor='rgba(255,255,255,0.3)',
-            title_font_color="darkblue",
-            xaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            yaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            legend=dict(font_color="darkblue")
-        )
-        st.plotly_chart(fig_comp_rain, use_container_width=True)
-        
-        st.subheader("💨 AQI Trend Comparison")
-        fig_comp_aqi = px.line(comparison_data, x='Date', y='AQI', color='City',
-                               title='AQI Trends Across Cities')
-        fig_comp_aqi.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)', 
-            plot_bgcolor='rgba(255,255,255,0.3)',
-            title_font_color="darkblue",
-            xaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            yaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            legend=dict(font_color="darkblue")
-        )
-        st.plotly_chart(fig_comp_aqi, use_container_width=True)
+        temp_insight = f"☀️ **Warm & Pleasant:** 
