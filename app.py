@@ -55,17 +55,14 @@ def style_dashboard():
         [data-testid="stMarkdownContainer"] p, h1, h3 { color: white !important; }
         h1 { border-bottom: 2px solid white; padding-bottom: 10px; }
 
-        /* Sidebar controls (already dark with white text) */
-        [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
-        [data-testid="stSidebar"] label,
-        [data-testid="stSidebar"] h1,
-        [data-testid="stSidebar"] .st-emotion-cache-1g6goon {
-            color: white !important;
+        /* --- FIX FOR SIDEBAR CONTROLS --- */
+        /* Force a dark background for the sidebar */
+        [data-testid="stSidebar"] {
+            background-color: #0E1117;
         }
-        
-        [data-testid="stSidebar"] .st-emotion-cache-b7h6b3,
-        [data-testid="stSidebar"] .st-emotion-cache-1n76a9l {
-             color: white !important;
+        /* Use a wildcard selector to force all text within the sidebar to be white */
+        [data-testid="stSidebar"] * {
+            color: white !important;
         }
     </style>
     """, unsafe_allow_html=True)
