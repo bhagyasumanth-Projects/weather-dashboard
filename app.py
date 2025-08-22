@@ -300,4 +300,50 @@ with tab2:
     if avg_pred_temp > 30:
         temp_insight = f"🥵 **Hot Weather Alert:** With an average temperature of **{avg_pred_temp:.1f}°C**, expect hot conditions. It's a good idea to stay hydrated and avoid direct sun during peak hours."
     elif avg_pred_temp > 25:
-        temp_insight = f"☀️ **Warm & Pleasant:** 
+        temp_insight = f"☀️ **Warm & Pleasant:** The weather looks warm and pleasant, with an average of **{avg_pred_temp:.1f}°C**. Great for outdoor activities!"
+    else:
+        temp_insight = f"😊 **Cool & Comfortable:** The forecast predicts a comfortable average temperature of **{avg_pred_temp:.1f}°C**."
+    
+    st.markdown(temp_insight)
+
+    rain_insight = ""
+    if total_pred_rain > 50:
+        rain_insight = f"🌧️ **Heavy Rain Expected:** A significant amount of rain (**{total_pred_rain:.1f} mm**) is forecasted for the week. Be prepared for wet conditions and carry an umbrella."
+    elif total_pred_rain > 10:
+        rain_insight = f"🌦️ **Moderate Showers:** Expect some moderate showers throughout the week, with a total of **{total_pred_rain:.1f} mm** predicted. "
+    else:
+        rain_insight = f"🌤️ **Mostly Dry:** The forecast shows very little rain (**{total_pred_rain:.1f} mm**), so you can expect mostly dry and clear skies."
+
+    st.markdown(rain_insight)
+
+
+with tab3:
+    st.header("City Comparison")
+
+    if not compare_cities:
+        st.warning("Please select at least one city from the sidebar to compare.")
+    else:
+        comparison_data = data[
+            (data['City'].isin(compare_cities)) &
+            (data['Date'].dt.date >= start_date) &
+            (data['Date'].dt.date <= end_date)
+        ]
+
+        st.subheader("🌡️ Average Temperature Comparison")
+        fig_comp_temp = px.line(comparison_data, x='Date', y='Avg_Temperature', color='City',
+                                title='Temperature Trends Across Cities', template="streamlit")
+        fig_comp_temp.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        st.plotly_chart(fig_comp_temp, use_container_width=True)
+
+        st.subheader("☔ Total Rainfall Comparison")
+        total_rain = comparison_data.groupby('City')['Rainfall(mm)'].sum().reset_index()
+        fig_comp_rain = px.bar(total_rain, x='City', y='Rainfall(mm)', color='City',
+                               title='Total Rainfall Across Cities (for selected date range)', template="streamlit")
+        fig_comp_rain.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        st.plotly_chart(fig_comp_rain, use_container_width=True)
+        
+        st.subheader("💨 AQI Trend Comparison")
+        fig_comp_aqi = px.line(comparison_data, x='Date', y='AQI', color='City',
+                               title='AQI Trends Across Cities', template="streamlit")
+        fig_comp_aqi.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        st.plotly_chart(fig_comp_aqi, use_container_width=True)
