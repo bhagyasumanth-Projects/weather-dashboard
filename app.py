@@ -21,11 +21,11 @@ st.set_page_config(
 def style_dashboard():
     """
     Injects custom CSS to style the dashboard with a pale sky blue theme
-    and sets a unique color for the sidebar controls.
+    and a fixed, high-contrast dark sidebar.
     """
     st.markdown("""
     <style>
-        /* Main background with a sky-like gradient */
+        /* Main background with a sky-like gradient - REMAINS CONSTANT */
         [data-testid="stAppViewContainer"] {
             background-image: linear-gradient(to bottom, #a1c4fd 0%, #c2e9fb 100%);
             background-size: cover;
@@ -56,22 +56,15 @@ def style_dashboard():
         [data-testid="stMarkdownContainer"] p, h1, h3 { color: #333 !important; }
         h1 { border-bottom: 2px solid #333; padding-bottom: 10px; }
 
-        /* --- UNIQUE COLOR FOR SIDEBAR CONTROLS --- */
-        /* Make all headings and labels in the sidebar a deep indigo color */
-        [data-testid="stSidebar"] h1,
-        [data-testid="stSidebar"] label {
-            color: #4B0082 !important; /* Deep Indigo */
+        /* --- FINAL FIX FOR SIDEBAR CONTROLS --- */
+        /* Set a fixed dark background for the sidebar */
+        [data-testid="stSidebar"] {
+            background-color: #0E1117; /* A standard dark theme color */
         }
         
-        /* Keep the info box text white for contrast on its blue background */
-        [data-testid="stSidebar"] .st-emotion-cache-1g6goon {
+        /* Make all text inside the sidebar white for high contrast */
+        [data-testid="stSidebar"] * {
             color: white !important;
-        }
-        
-        /* Make the text inside the dropdowns black for readability */
-        [data-testid="stSidebar"] .st-emotion-cache-b7h6b3,
-        [data-testid="stSidebar"] .st-emotion-cache-1n76a9l {
-             color: black !important;
         }
     </style>
     """, unsafe_allow_html=True)
