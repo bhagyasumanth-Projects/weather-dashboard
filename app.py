@@ -21,7 +21,7 @@ st.set_page_config(
 def style_dashboard():
     """
     Injects custom CSS to style the dashboard with a pale sky blue theme
-    and a fixed, high-contrast dark sidebar.
+    and an adaptive sidebar that respects the user's system theme.
     """
     st.markdown("""
     <style>
@@ -52,20 +52,19 @@ def style_dashboard():
         .kpi-card .value { font-size: 2.2rem; font-weight: bold; color: #000; }
         .kpi-card .sub-text { font-size: 0.9rem; color: #666; }
 
-        /* General text and headers for the light theme */
-        [data-testid="stMarkdownContainer"] p, h1, h3 { color: #333 !important; }
-        h1 { border-bottom: 2px solid #333; padding-bottom: 10px; }
+        /* General text and headers FOR THE MAIN CONTENT AREA ONLY */
+        [data-testid="stVerticalBlock"] [data-testid="stMarkdownContainer"] p, 
+        [data-testid="stVerticalBlock"] h1, 
+        [data-testid="stVerticalBlock"] h3 { 
+            color: #333 !important; 
+        }
+        [data-testid="stVerticalBlock"] h1 { 
+            border-bottom: 2px solid #333; 
+            padding-bottom: 10px; 
+        }
 
-        /* --- FINAL FIX FOR SIDEBAR CONTROLS --- */
-        /* Set a fixed dark background for the sidebar */
-        [data-testid="stSidebar"] {
-            background-color: #0E1117; /* A standard dark theme color */
-        }
-        
-        /* Make all text inside the sidebar white for high contrast */
-        [data-testid="stSidebar"] * {
-            color: white !important;
-        }
+        /* By not specifying any styles for the sidebar, it will now default
+           to Streamlit's adaptive theme (light for light mode, dark for dark mode) */
     </style>
     """, unsafe_allow_html=True)
 
