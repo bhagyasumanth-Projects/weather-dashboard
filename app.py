@@ -57,12 +57,16 @@ def style_dashboard():
         h1 { border-bottom: 2px solid #333; padding-bottom: 10px; }
 
         /* --- FIX FOR FADED SIDEBAR CONTROLS --- */
-        /* Target all text elements within the sidebar and make them white for contrast */
+        /* Target text elements within the sidebar and make them white for contrast */
         [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
         [data-testid="stSidebar"] label,
-        [data-testid="stSidebar"] h1,
         [data-testid="stSidebar"] .st-emotion-cache-1g6goon { /* Targets info box text */
             color: white !important;
+        }
+        
+        /* Set sidebar heading color to black */
+        [data-testid="stSidebar"] h1 {
+            color: black !important;
         }
         
         /* Target the dropdown arrow and text inside select/multiselect boxes */
@@ -165,7 +169,6 @@ city = st.sidebar.selectbox("Select a City for Detailed View", sorted(data['City
 min_date = data['Date'].min().date()
 max_date = data['Date'].max().date()
 
-# --- REPLACED POP-UP WITH SIDEBAR INFO BOX ---
 st.sidebar.info("Select the start and end date for your desired range.")
 
 date_range = st.sidebar.date_input(
