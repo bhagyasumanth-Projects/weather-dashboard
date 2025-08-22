@@ -20,52 +20,49 @@ st.set_page_config(
 # ------------------------------
 def style_dashboard():
     """
-    Injects custom CSS to style the dashboard with a pale sky blue theme
-    and ensures the sidebar controls are visible with white text.
+    Injects custom CSS to style the dashboard with a dark theme.
     """
     st.markdown("""
     <style>
-        /* Main background with a sky-like gradient */
+        /* Main background with a dark gradient */
         [data-testid="stAppViewContainer"] {
-            background-image: linear-gradient(to bottom, #a1c4fd 0%, #c2e9fb 100%);
+            background-image: linear-gradient(to bottom, #020024 0%, #090979 35%, #00d4ff 100%);
             background-size: cover;
         }
 
-        /* Main content block with a semi-transparent white background */
+        /* Main content block with a semi-transparent dark background */
         [data-testid="stVerticalBlock"] .st-emotion-cache-15i5057 {
-            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
             border-radius: 15px;
             padding: 2rem;
         }
         
-        /* KPI Card Style for the light theme */
+        /* KPI Card Style for the dark theme */
         .kpi-card {
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(40, 40, 40, 0.8);
             border-radius: 15px;
             padding: 25px;
             text-align: center;
-            color: #333; /* Dark text for readability */
-            border: 1px solid #ddd;
+            color: white;
+            border: 1px solid #444;
             height: 100%;
         }
-        .kpi-card h3 { font-size: 1.25rem; margin-bottom: 10px; color: #555; }
-        .kpi-card .value { font-size: 2.2rem; font-weight: bold; color: #000; }
-        .kpi-card .sub-text { font-size: 0.9rem; color: #666; }
+        .kpi-card h3 { font-size: 1.25rem; margin-bottom: 10px; color: #ccc; }
+        .kpi-card .value { font-size: 2.2rem; font-weight: bold; color: white; }
+        .kpi-card .sub-text { font-size: 0.9rem; color: #aaa; }
 
-        /* General text and headers for the light theme */
-        [data-testid="stMarkdownContainer"] p, h1, h3 { color: #333 !important; }
-        h1 { border-bottom: 2px solid #333; padding-bottom: 10px; }
+        /* General text and headers for the dark theme */
+        [data-testid="stMarkdownContainer"] p, h1, h3 { color: white !important; }
+        h1 { border-bottom: 2px solid white; padding-bottom: 10px; }
 
-        /* --- FIX FOR FADED SIDEBAR CONTROLS --- */
-        /* Target all text elements within the sidebar and make them white for contrast */
+        /* Sidebar controls (already dark with white text) */
         [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
         [data-testid="stSidebar"] label,
         [data-testid="stSidebar"] h1,
-        [data-testid="stSidebar"] .st-emotion-cache-1g6goon { /* Targets info box text */
+        [data-testid="stSidebar"] .st-emotion-cache-1g6goon {
             color: white !important;
         }
         
-        /* Target the dropdown arrow and text inside select/multiselect boxes */
         [data-testid="stSidebar"] .st-emotion-cache-b7h6b3,
         [data-testid="stSidebar"] .st-emotion-cache-1n76a9l {
              color: white !important;
@@ -165,7 +162,6 @@ city = st.sidebar.selectbox("Select a City for Detailed View", sorted(data['City
 min_date = data['Date'].min().date()
 max_date = data['Date'].max().date()
 
-# --- REPLACED POP-UP WITH SIDEBAR INFO BOX ---
 st.sidebar.info("Select the start and end date for your desired range.")
 
 date_range = st.sidebar.date_input(
@@ -243,11 +239,8 @@ with tab1:
     fig.update_layout(
         title_x=0.5, 
         paper_bgcolor='rgba(0,0,0,0)', 
-        plot_bgcolor='rgba(255,255,255,0.3)',
-        title_font_color="darkblue",
-        xaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-        yaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-        legend=dict(font_color="darkblue")
+        plot_bgcolor='rgba(0,0,0,0.3)',
+        font=dict(color="white")
     )
     st.plotly_chart(fig, use_container_width=True)
 
@@ -281,11 +274,8 @@ with tab2:
         fig_temp_future.add_scatter(x=forecast_temp['ds'], y=forecast_temp['yhat_lower'], fill='tozeroy', mode='lines', line=dict(color='rgba(0, 0, 255, 0.2)'), name='Lower Bound')
         fig_temp_future.update_layout(
             paper_bgcolor='rgba(0,0,0,0)', 
-            plot_bgcolor='rgba(255,255,255,0.3)',
-            title_font_color="darkblue",
-            xaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            yaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            legend=dict(font_color="darkblue")
+            plot_bgcolor='rgba(0,0,0,0.3)',
+            font=dict(color="white")
         )
         st.plotly_chart(fig_temp_future, use_container_width=True)
 
@@ -310,11 +300,8 @@ with tab2:
         fig_rain_future.add_scatter(x=forecast_rain['ds'], y=forecast_rain['yhat_lower'], fill='tozeroy', mode='lines', line=dict(color='rgba(0, 100, 80, 0.2)'), name='Lower Bound')
         fig_rain_future.update_layout(
             paper_bgcolor='rgba(0,0,0,0)', 
-            plot_bgcolor='rgba(255,255,255,0.3)',
-            title_font_color="darkblue",
-            xaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            yaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            legend=dict(font_color="darkblue")
+            plot_bgcolor='rgba(0,0,0,0.3)',
+            font=dict(color="white")
         )
         st.plotly_chart(fig_rain_future, use_container_width=True)
 
@@ -367,11 +354,8 @@ with tab3:
                                 title='Temperature Trends Across Cities')
         fig_comp_temp.update_layout(
             paper_bgcolor='rgba(0,0,0,0)', 
-            plot_bgcolor='rgba(255,255,255,0.3)',
-            title_font_color="darkblue",
-            xaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            yaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            legend=dict(font_color="darkblue")
+            plot_bgcolor='rgba(0,0,0,0.3)',
+            font=dict(color="white")
         )
         st.plotly_chart(fig_comp_temp, use_container_width=True)
 
@@ -381,11 +365,8 @@ with tab3:
                                title='Total Rainfall Across Cities (for selected date range)')
         fig_comp_rain.update_layout(
             paper_bgcolor='rgba(0,0,0,0)', 
-            plot_bgcolor='rgba(255,255,255,0.3)',
-            title_font_color="darkblue",
-            xaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            yaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            legend=dict(font_color="darkblue")
+            plot_bgcolor='rgba(0,0,0,0.3)',
+            font=dict(color="white")
         )
         st.plotly_chart(fig_comp_rain, use_container_width=True)
         
@@ -394,10 +375,7 @@ with tab3:
                                title='AQI Trends Across Cities')
         fig_comp_aqi.update_layout(
             paper_bgcolor='rgba(0,0,0,0)', 
-            plot_bgcolor='rgba(255,255,255,0.3)',
-            title_font_color="darkblue",
-            xaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            yaxis=dict(title_font_color="darkblue", tickfont_color="darkblue"),
-            legend=dict(font_color="darkblue")
+            plot_bgcolor='rgba(0,0,0,0.3)',
+            font=dict(color="white")
         )
         st.plotly_chart(fig_comp_aqi, use_container_width=True)
