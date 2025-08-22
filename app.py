@@ -21,7 +21,7 @@ st.set_page_config(
 def style_dashboard():
     """
     Injects custom CSS to style the dashboard with a pale sky blue theme
-    and ensures the sidebar controls are visible with white text.
+    and ensures the sidebar controls are visible.
     """
     st.markdown("""
     <style>
@@ -56,20 +56,19 @@ def style_dashboard():
         [data-testid="stMarkdownContainer"] p, h1, h3 { color: #333 !important; }
         h1 { border-bottom: 2px solid #333; padding-bottom: 10px; }
 
-        /* --- FIX FOR FADED SIDEBAR CONTROLS --- */
-        /* Target text elements within the sidebar and make them white for contrast */
-        [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
-        [data-testid="stSidebar"] label,
-        [data-testid="stSidebar"] .st-emotion-cache-1g6goon { /* Targets info box text */
-            color: white !important;
-        }
-        
-        /* Set sidebar heading color to black */
-        [data-testid="stSidebar"] h1 {
+        /* --- FIX FOR SIDEBAR CONTROLS --- */
+        /* Make all headings and labels in the sidebar black */
+        [data-testid="stSidebar"] h1,
+        [data-testid="stSidebar"] label {
             color: black !important;
         }
         
-        /* Target the dropdown arrow and text inside select/multiselect boxes */
+        /* Keep the info box text white for contrast */
+        [data-testid="stSidebar"] .st-emotion-cache-1g6goon {
+            color: white !important;
+        }
+        
+        /* Keep the dropdown text white */
         [data-testid="stSidebar"] .st-emotion-cache-b7h6b3,
         [data-testid="stSidebar"] .st-emotion-cache-1n76a9l {
              color: white !important;
